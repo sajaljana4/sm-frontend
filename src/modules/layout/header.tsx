@@ -17,11 +17,13 @@ import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BASE_MEDIA_URL } from "@/services/config/query-urls";
+import { usePathname } from "next/navigation";
 
 function Header() {
   const { openLoginModal, profile, refetchProfile, setProfile } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   const fetchProfile = async () => {
     const token = await getAuthToken();
@@ -84,21 +86,32 @@ function Header() {
               {[
                 { href: "/dashboard", label: "Home", show: !!profile },
                 { href: "/", label: "Home", show: !profile },
-                { href: "/", label: "About", show: true },
-                { href: "/", label: "Packages", show: true },
-                { href: "/", label: "Contact", show: true },
+                { href: "/about-us", label: "About", show: true },
+                { href: "/packages", label: "Packages", show: true },
+                { href: "/contact", label: "Contact", show: true },
               ]
                 .filter((item) => item.show)
-                .map((item, idx) => (
-                  <Link
-                    key={idx}
-                    href={item.href}
-                    className="group relative py-1 font-medium text-[#1E1B16]/65 transition-colors hover:text-[#B3243A]"
-                  >
-                    {item.label}
-                    <span className="absolute -bottom-0.5 left-1/2 h-[1.5px] w-0 -translate-x-1/2 bg-[#98BA42] transition-all duration-300 group-hover:w-full" />
-                  </Link>
-                ))}
+                .map((item, idx) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={idx}
+                      href={item.href}
+                      className={`group relative py-1 font-medium transition-colors ${
+                        isActive
+                          ? "text-[#B3243A]"
+                          : "text-[#1E1B16]/65 hover:text-[#B3243A]"
+                      }`}
+                    >
+                      {item.label}
+                      <span
+                        className={`absolute -bottom-0.5 left-1/2 h-[1.5px] -translate-x-1/2 bg-[#98BA42] transition-all duration-300 ${
+                          isActive ? "w-full" : "w-0 group-hover:w-full"
+                        }`}
+                      />
+                    </Link>
+                  );
+                })}
             </nav>
 
             <Link
