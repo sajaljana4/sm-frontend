@@ -18,19 +18,10 @@ import { toast } from "sonner";
 const loginModalImage =
   "https://images.unsplash.com/photo-1621801306185-8c0ccf9c8eb8?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
-type LoginTab = "email" | "phone" | "smId";
-
-const LOGIN_TABS: { id: LoginTab; label: string }[] = [
-  { id: "email", label: "Email" },
-  { id: "phone", label: "Phone" },
-  { id: "smId", label: "SM ID" },
-];
-
 function LoginModal() {
   const router = useRouter();
   const { loginModalOpen, closeLoginModal, setProfile } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<LoginTab>("email");
 
   const methods = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
@@ -44,16 +35,8 @@ function LoginModal() {
   const {
     register,
     handleSubmit,
-    resetField,
     formState: { errors },
   } = methods;
-
-  const handleTabChange = (tab: LoginTab) => {
-    resetField("email");
-    resetField("phone");
-    resetField("smId");
-    setActiveTab(tab);
-  };
 
   const onSubmit = async (data: LoginSchemaType) => {
     try {
@@ -79,102 +62,144 @@ function LoginModal() {
 
   return (
     <Dialog open={loginModalOpen} onOpenChange={closeLoginModal}>
-      <DialogContent className="grid grid-cols-1 lg:grid-cols-2 p-0 w-full md:max-w-4xl overflow-hidden">
-        <DialogTitle hidden />
+      <DialogContent
+        showCloseButton={false}
+        className="grid grid-cols-1 lg:grid-cols-2 p-0 w-full md:max-w-4xl overflow-hidden bg-white rounded-2xl gap-0"
+      >
+        <DialogTitle hidden>Log in</DialogTitle>
 
-        <div className="relative h-130 w-full hidden md:block">
-          <Image
-            src={smLogo}
-            width={200}
-            height={200}
-            alt="Logo"
-            className="w-10 aspect-4/3 absolute top-8 left-8 z-10"
-          />
-          <Image
-            src={loginModalImage}
-            alt="login"
-            fill
-            className="object-cover"
-          />
-        </div>
-        <div className="flex flex-col items-center justify-center py-10">
-          <Image
-            src={decorativeLeaf}
-            alt="Decorative Element"
-            width={100}
-            height={100}
-            className="w-20 aspect-square object-contain"
-          />
+        {/* wrapper only exists to give absolute children a positioning context —
+            does not touch DialogContent's own fixed/centering classes */}
+        <div className="relative col-span-full grid grid-cols-1 lg:grid-cols-2 items-stretch">
+          {/* top ribbon accent */}
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#B3243A] via-[#C9302E] to-[#98BA42] z-20" />
 
-          <div className="text-center max-w-md py-6">
-            <h4 className="text-2xl font-bold">LOG IN</h4>
-            <p>Choose how you&apos;d like to sign in to your account</p>
+          {/* custom close button */}
+          <button
+            type="button"
+            onClick={closeLoginModal}
+            aria-label="Close"
+            className="cursor-pointer absolute top-5 right-5 z-30 flex h-9 w-9 items-center justify-center rounded-full bg-white border border-black/10 text-black/50 hover:text-[#B3243A] hover:border-[#B3243A]/30 shadow-sm transition-colors"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M2 2L14 14M14 2L2 14"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+
+          {/* image side — stretches to match the form column's height instead of a fixed h-130 */}
+          <div className="relative w-full h-full min-h-130 hidden lg:block">
+            <Image
+              src={loginModalImage}
+              alt="Raibar"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1E1B16] via-[#1E1B16]/40 to-[#B3243A]/25" />
+
+            <Image
+              src={smLogo}
+              width={40}
+              height={40}
+              alt="Raibar"
+              className="absolute top-8 left-8 z-10 w-10 h-10 object-contain"
+            />
+
+            <svg
+              className="absolute bottom-8 left-8 w-16 h-16 text-[#98BA42]/70"
+              viewBox="0 0 64 64"
+              fill="none"
+            >
+              <path
+                d="M4 60V16C4 9.373 9.373 4 16 4h44"
+                stroke="currentColor"
+                strokeWidth="1.2"
+              />
+              <circle cx="4" cy="60" r="2.5" fill="currentColor" />
+            </svg>
+
+            <div className="absolute bottom-8 right-8 z-10 text-right">
+              <p className="text-md tracking-[0.25em] uppercase text-[#F5F0E8]/70 font-medium">
+                Santali Matrimony
+              </p>
+              <p className="text-xs font-serif italic text-[#F5F0E8]/50 tracking-wide">
+                India&apos;s Trusted Santhali Matrimony
+              </p>
+            </div>
           </div>
 
-          <div className="w-full max-w-md space-y-4 pr-6">
-            <div className="flex rounded-lg border border-gray-200 overflow-hidden">
-              {LOGIN_TABS.map((tab) => (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => handleTabChange(tab.id)}
-                  className={`flex-1 py-2 text-sm font-medium transition-colors ${
-                    activeTab === tab.id
-                      ? "bg-[#E32C6F] text-white"
-                      : "bg-white text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
+          {/* form side */}
+          <div className="flex flex-col items-center justify-center py-12 px-8 sm:px-12">
+            <Image
+              src={decorativeLeaf}
+              alt=""
+              width={72}
+              height={72}
+              className="w-14 aspect-square object-contain opacity-80"
+            />
+
+            <div className="text-center max-w-md pt-5 pb-8">
+              <span className="inline-block px-3 py-1 rounded-full text-[10px] tracking-[0.2em] uppercase font-semibold bg-[#98BA42]/12 text-[#6f8a2e] border border-[#98BA42]/25 mb-4">
+                Sign In
+              </span>
+              <h4 className="font-serif text-3xl text-[#1E1B16]">
+                Welcome Back
+              </h4>
+              <p className="text-[#1E1B16]/55 text-sm mt-2">
+                Continue your journey to find a life partner
+              </p>
             </div>
 
-            <FormProvider {...methods}>
-              {activeTab === "email" && (
+            <div className="w-full max-w-md space-y-4">
+              <FormProvider {...methods}>
                 <Input
-                  placeholder="Email"
+                  placeholder="Email / Phone / SMID"
                   type="email"
                   {...register("email")}
                   error={errors.email?.message}
+                  className="bg-[#FAFAF8] border border-black/12 text-[#1E1B16] placeholder:text-black/35 hover:border-black/20 focus-visible:ring-[#98BA42]/30 focus-visible:border-[#98BA42]/60 h-12 rounded-lg"
                 />
-              )}
-              {activeTab === "phone" && (
-                <PhoneInput
-                  placeholder="XXXXXXXXXX"
-                  error={errors.phone?.message}
-                  value={methods.watch("phone")}
-                  onChange={(value) => methods.setValue("phone", value)}
-                  onBlur={() => {}}
-                />
-              )}
-              {activeTab === "smId" && (
                 <Input
-                  placeholder="SM ID"
-                  {...register("smId")}
-                  error={errors.smId?.message}
+                  placeholder="Password"
+                  type="password"
+                  {...register("password")}
+                  error={errors.password?.message}
+                  className="bg-[#FAFAF8] border border-black/12 text-[#1E1B16] placeholder:text-black/35 hover:border-black/20 focus-visible:ring-[#98BA42]/30 focus-visible:border-[#98BA42]/60 h-12 rounded-lg"
                 />
-              )}
-              <Input
-                placeholder="Password"
-                type="password"
-                {...register("password")}
-                error={errors.password?.message}
-              />
-              <Button
-                size={"lg"}
-                className="bg-[#E32C6F] w-full"
-                onClick={handleSubmit(onSubmit)}
-                isLoading={loading}
-              >
-                LOG IN
-              </Button>
-            </FormProvider>
-            <p className="text-center">
-              Don&apos;t have an account?{" "}
-              <Button variant={"link"} onClick={navigateToRegister}>
-                Register
-              </Button>
-            </p>
+
+                <Button
+                  size="lg"
+                  className="w-full h-12 bg-[#B3243A] hover:bg-[#C9302E] text-white font-medium tracking-wide rounded-lg transition-colors cursor-pointer disabled:cursor-not-allowed disabled:bg-[#B3243A]/50 disabled:text-white/60"
+                  onClick={handleSubmit(onSubmit)}
+                  isLoading={loading}
+                >
+                  LOG IN
+                </Button>
+              </FormProvider>
+
+              <div className="flex items-center gap-3 py-1">
+                <span className="h-px flex-1 bg-black/10" />
+                <span className="text-[10px] tracking-[0.2em] uppercase text-black/35">
+                  New here
+                </span>
+                <span className="h-px flex-1 bg-black/10" />
+              </div>
+
+              <p className="text-center text-[#1E1B16]/60 text-sm">
+                Don&apos;t have an account?{" "}
+                <Button
+                  variant="link"
+                  onClick={navigateToRegister}
+                  className="text-[#B3243A] hover:text-[#C9302E] px-1 cursor-pointer transition-colors text-sm font-medium"
+                >
+                  Register
+                </Button>
+              </p>
+            </div>
           </div>
         </div>
       </DialogContent>
