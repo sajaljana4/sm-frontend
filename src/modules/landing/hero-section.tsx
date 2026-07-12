@@ -1,6 +1,14 @@
-import { landingHeader } from "@/assets";
+"use client";
+import { landingHeader, landingHeader1 } from "@/assets";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
+
+// Hero slide images
+const heroImages = [landingHeader, landingHeader1];
 
 function HeroSection() {
   return (
@@ -14,72 +22,58 @@ function HeroSection() {
           0%, 100% { filter: drop-shadow(0 0 0 rgba(152,186,66,0)); }
           50%      { filter: drop-shadow(0 0 4px rgba(152,186,66,0.3)); }
         }
-        @keyframes drift {
-          0%   { transform: translate(0, 0) rotate(0deg); }
-          50%  { transform: translate(6px, -8px) rotate(2deg); }
-          100% { transform: translate(0, 0) rotate(0deg); }
-        }
         .hero-ring-glow { animation: ringGlow 4s ease-in-out infinite; }
-        .hero-corner { animation: drift 9s ease-in-out infinite; }
         @media (prefers-reduced-motion: reduce) {
-          .hero-ring-glow, .hero-corner, .hero-kenburns, .hero-float-1, .hero-float-2 {
+          .hero-ring-glow, .hero-kenburns, .hero-float-1, .hero-float-2 {
             animation: none !important;
           }
         }
+        /* Ken Burns effect for subtle motion between slides */
+        @keyframes kenburns {
+          0% { transform: scale(1) translateY(0); }
+          50% { transform: scale(1.06) translateY(-2%); }
+          100% { transform: scale(1) translateY(0); }
+        }
+        .hero-kenburns { animation: kenburns 20s ease-in-out infinite; transform-origin: center; }
+        /* make slide opacity transitions align with Swiper speed */
+        .swiper-slide { transition: opacity 1.2s ease !important; }
       `}</style>
 
-      {/* Background image with slow zoom */}
+      {/* Background image slider */}
       <div className="absolute inset-0 h-full w-full">
-        <Image
-          src={landingHeader}
-          alt="Hero section background"
-          className="hero-kenburns h-full w-full object-cover"
-          priority
-          fill
-        />
+        <Swiper
+          modules={[Autoplay, EffectFade]}
+          effect="fade"
+          fadeEffect={{ crossFade: true }}
+          speed={1200}
+          autoplay={{ delay: 8000, disableOnInteraction: false, waitForTransition: true }}
+          loop
+          allowTouchMove={false}
+          className="h-full w-full"
+        >
+          {heroImages.map((img, idx) => (
+            <SwiperSlide key={idx}>
+              <div className="relative h-full w-full">
+                <Image
+                  src={img}
+                  alt="Hero section background"
+                  className="hero-kenburns h-full w-full object-cover"
+                  priority={idx === 0}
+                  fill
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
         {/* Layered overlay for depth and legibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1E1B16]/85 via-[#1E1B16]/60 to-[#1E1B16]/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1E1B16] via-[#1E1B16]/20 to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,#1E1B16_95%)] opacity-60" />
+        <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-r from-[#1E1B16]/85 via-[#1E1B16]/60 to-[#1E1B16]/30" />
+        <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-[#1E1B16] via-[#1E1B16]/20 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,transparent_35%,#1E1B16_95%)] opacity-60" />
       </div>
 
-      {/* Ornamental corner flourishes — thin gold linework, mandap-arch inspired */}
-      <svg
-        className="hero-corner absolute left-6 top-6 hidden md:block opacity-70"
-        width="56"
-        height="56"
-        viewBox="0 0 56 56"
-        fill="none"
-        aria-hidden
-      >
-        <path
-          d="M2 32 C2 13 13 2 32 2"
-          stroke="#98ba42"
-          strokeWidth="1"
-          strokeLinecap="round"
-        />
-        <circle cx="32" cy="2" r="2.5" fill="#98ba42" />
-      </svg>
-      <svg
-        className="hero-corner absolute right-6 top-6 hidden md:block opacity-70"
-        width="56"
-        height="56"
-        viewBox="0 0 56 56"
-        fill="none"
-        aria-hidden
-        style={{ animationDelay: "1.5s" }}
-      >
-        <path
-          d="M54 32 C54 13 43 2 24 2"
-          stroke="#98ba42"
-          strokeWidth="1"
-          strokeLinecap="round"
-        />
-        <circle cx="24" cy="2" r="2.5" fill="#98ba42" />
-      </svg>
-
       {/* Content Container */}
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-12 pb-16 sm:px-6 md:py-16 md:pb-20 xl:px-4">
+      <div className="relative z-20 mx-auto max-w-7xl px-4 py-12 pb-16 sm:px-6 md:py-16 md:pb-20 xl:px-4">
         <div className="flex flex-col items-center justify-center">
           <div className="flex flex-col items-center justify-center text-center text-white max-w-3xl">
             {/* Eyebrow flanked by hairlines */}
@@ -158,11 +152,11 @@ function HeroSection() {
       </div>
 
       {/* Bottom Border Accent */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#98ba42]/70 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#98ba42]/70 to-transparent z-20" />
 
       {/* Signature: interlocking rings — the union motif */}
       <svg
-        className="hero-ring-glow absolute -bottom-6 left-1/2 z-10 -translate-x-1/2 hidden md:block"
+        className="hero-ring-glow absolute -bottom-6 left-1/2 z-20 -translate-x-1/2 hidden md:block"
         width="96"
         height="56"
         viewBox="0 0 96 56"

@@ -11,6 +11,7 @@ import registrationImage from "./auth/registration.png";
 import sample1 from "./landing/sample1.png";
 import sample2 from "./landing/sample2.png";
 import landingHeader from "./landing/landing-header.png";
+import landingHeader1 from "./landing/landing-header-1.webp";
 import packageSectionBackground from "./landing/package-section-background.png";
 
 import premiumSectionGirl from "./premium-section-girl.png";
@@ -22,6 +23,7 @@ export {
   registrationImage,
   decorativeLeaf,
   landingHeader,
+  landingHeader1,
   sample1,
   sample2,
   packageSectionBackground,
