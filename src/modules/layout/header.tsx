@@ -57,7 +57,7 @@ function Header() {
   return (
     <div className="fixed top-0 left-0 w-full z-100 lg:h-20">
       {/* Slim brand ribbon */}
-      <div className="gradient-shift h-1 w-full bg-gradient-to-r from-[#B3243A] via-[#C9962C] to-[#B3243A]" />
+      <div className="h-1 w-full bg-gradient-to-r from-[#B3243A] via-[#98BA42] to-[#B3243A]" />
 
       <div className="bg-white/95 backdrop-blur-md shadow-[0_4px_20px_rgba(30,27,22,0.06)]">
         <div className="flex justify-between items-center gap-4 base-section py-2.5 md:py-3">
@@ -96,14 +96,14 @@ function Header() {
                     className="group relative py-1 font-medium text-[#1E1B16]/65 transition-colors hover:text-[#B3243A]"
                   >
                     {item.label}
-                    <span className="absolute -bottom-0.5 left-1/2 h-[1.5px] w-0 -translate-x-1/2 bg-[#C9962C] transition-all duration-300 group-hover:w-full" />
+                    <span className="absolute -bottom-0.5 left-1/2 h-[1.5px] w-0 -translate-x-1/2 bg-[#98BA42] transition-all duration-300 group-hover:w-full" />
                   </Link>
                 ))}
             </nav>
 
             <Link
               href="tel:+91 97498 58463"
-              className="hidden lg:flex items-center gap-2 rounded-full border border-[#B3243A]/20 pl-2 pr-4 py-1.5 text-[#1E1B16]/80 transition-colors hover:bg-[#F1DCC9]/25 cursor-pointer"
+              className="hidden lg:flex items-center gap-2 rounded-full border border-[#B3243A]/20 pl-2 pr-4 py-1.5 text-[#1E1B16]/80 transition-colors hover:bg-[#98BA42]/10 cursor-pointer"
             >
               <span className="relative flex h-7 w-7 items-center justify-center">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#B3243A]/30" />
@@ -118,9 +118,9 @@ function Header() {
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="flex items-center gap-2 rounded-full border border-transparent p-1 pr-2 transition-colors hover:border-[#C9962C]/30 hover:bg-[#F1DCC9]/30 focus:outline-none focus:ring-2 focus:ring-[#B3243A]/20"
+                  className="flex items-center gap-2 rounded-full border border-transparent p-1 pr-2 transition-colors hover:border-[#98BA42]/30 hover:bg-[#98BA42]/10 focus:outline-none focus:ring-2 focus:ring-[#B3243A]/20"
                 >
-                  <Avatar className="w-9 h-9 border-2 border-[#C9962C]/50 shadow-sm">
+                  <Avatar className="w-9 h-9 border-2 border-[#98BA42]/50 shadow-sm">
                     <AvatarImage
                       src={
                         profile.profileImages?.[0]
@@ -144,7 +144,7 @@ function Header() {
 
                 {isMenuOpen && (
                   <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-black/5 overflow-hidden flex flex-col py-2 animate-in fade-in zoom-in-95 duration-200">
-                    <div className="px-4 py-3 border-b border-black/5 flex flex-col gap-0.5 bg-[#F1DCC9]/15">
+                    <div className="px-4 py-3 border-b border-black/5 flex flex-col gap-0.5 bg-[#98BA42]/10">
                       <p className="font-semibold text-[#1E1B16] truncate text-base">
                         {profile.firstName
                           ? `${profile.firstName} ${profile.lastName || ""}`.trim()
@@ -161,7 +161,7 @@ function Header() {
                     <div className="flex flex-col py-1">
                       <Link
                         href="/my/profile"
-                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#F1DCC9]/25 text-sm text-[#1E1B16]/75 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#98BA42]/10 text-sm text-[#1E1B16]/75 transition-colors"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <User size={18} className="text-[#B3243A]" />
@@ -169,7 +169,7 @@ function Header() {
                       </Link>
                       <Link
                         href="/my/interests"
-                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#F1DCC9]/25 text-sm text-[#1E1B16]/75 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#98BA42]/10 text-sm text-[#1E1B16]/75 transition-colors"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <Heart size={18} className="text-[#B3243A]" />
@@ -177,7 +177,7 @@ function Header() {
                       </Link>
                       <Link
                         href="/my/shortlists"
-                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#F1DCC9]/25 text-sm text-[#1E1B16]/75 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#98BA42]/10 text-sm text-[#1E1B16]/75 transition-colors"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <List size={18} className="text-[#B3243A]" />
@@ -185,7 +185,7 @@ function Header() {
                       </Link>
                       <Link
                         href="/packages"
-                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#F1DCC9]/25 text-sm text-[#1E1B16]/75 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#98BA42]/10 text-sm text-[#1E1B16]/75 transition-colors"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <Package size={18} className="text-[#B3243A]" />
