@@ -10,10 +10,9 @@ export const getCookie = async (key: string) => {
 
 export const setAuthToken = async (token: string) => {
   try {
-    const status = (await cookies()).set(TOKEN_KEY, token);
-    if (status) return;
-    throw new Error("Failed to set token");
-  } catch {
+    (await cookies()).set(TOKEN_KEY, token);
+  } catch (error) {
+    console.error("Error setting auth token:", error);
     throw new Error("Failed to set token");
   }
 };
@@ -24,10 +23,9 @@ export const getAuthToken = async () => {
 
 export const removeAuthToken = async () => {
   try {
-    const status = (await cookies()).delete(TOKEN_KEY);
-    if (status) return;
-    throw new Error("Failed to remove token");
-  } catch {
-    throw new Error("Failed to remove token");
+    (await cookies()).delete(TOKEN_KEY);
+  } catch (error) {
+    console.error("Error removing auth token:", error);
+    // Don't throw - just log the error to avoid breaking logout flow
   }
 };

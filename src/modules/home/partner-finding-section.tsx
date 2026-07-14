@@ -8,12 +8,17 @@ async function PartnerFindingSection() {
 
   if (!data || data.length === 0) return null;
 
+  // Filter users to ensure they have valid _id
+  const validUsers = data.filter((user) => user && user._id);
+
+  if (validUsers.length === 0) return null;
+
   return (
     <div className="bg-[#E8FBFD]">
       <div className="base-section px-4">
         <h2 className="text-3xl font-bold mb-8">Find Your Partner</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {data.map((user) => (
+          {validUsers.map((user) => (
             <ProfileCardCompact key={user._id} user={user} />
           ))}
         </div>

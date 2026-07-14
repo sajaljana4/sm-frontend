@@ -14,12 +14,15 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BASE_MEDIA_URL } from "@/services/config/query-urls";
 import { usePathname } from "next/navigation";
+import { toast } from "sonner";
 
 function Header() {
+  const router = useRouter();
   const { openLoginModal, profile, refetchProfile, setProfile } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -51,8 +54,11 @@ function Header() {
       await removeAuthToken();
       setProfile(null);
       setIsMenuOpen(false);
+      toast.success("Logged out successfully");
+      router.push("/");
     } catch (error) {
       console.error("Failed to logout", error);
+      toast.error("Failed to logout");
     }
   };
 
