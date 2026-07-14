@@ -15,10 +15,25 @@ const otherGuardedArray = (selectMessage: string, specifyMessage: string) =>
     });
 
 // ─── Login Schema ──────────────────────────────────────────────
+const EMAIL_OR_PHONE_OR_SMID_ERROR =
+  "Enter a valid email, 10-digit phone number, or SMID";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_10_DIGIT_REGEX = /^\d{10}$/;
+const SMID_REGEX = /^[A-Za-z0-9._-]{3,}$/; // allow basic alphanumeric IDs, min length 3
+
 export const loginSchema = z.object({
-  email: z.email("Invalid email address").optional(),
-  phone: z.string().optional(),
-  smId: z.string().optional(),
+  // `email` here is the form field used by the login form, but it accepts
+  // email addresses, 10-digit phone numbers, or a SMID identifier.
+  email: z
+    .string()
+    .min(1, "Email / Phone / SMID is required")
+    .refine(
+      (v) => EMAIL_REGEX.test(v) || PHONE_10_DIGIT_REGEX.test(v) || SMID_REGEX.test(v),
+      {
+        message: EMAIL_OR_PHONE_OR_SMID_ERROR,
+      },
+    ),
   password: z.string().min(1, "Password is required"),
 });
 

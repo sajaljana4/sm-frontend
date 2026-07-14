@@ -42,7 +42,8 @@ function LoginModal() {
     try {
       setLoading(true);
       const res = await authService.login(data);
-      if (!res.data) {
+      // If data is empty or missing required fields, display error with API message
+      if (!res.data || Object.keys(res.data).length === 0) {
         throw new Error(res.message ?? "Failed to login");
       }
       const { user, accessToken } = res.data;
@@ -52,9 +53,8 @@ function LoginModal() {
       closeLoginModal();
       router.push("/dashboard");
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Something went wrong",
-      );
+      const errorMessage = error instanceof Error ? error.message : "Something went wrong";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
